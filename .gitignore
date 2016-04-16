@@ -1,0 +1,7 @@
+/target
+/.classpath
+/.gwt/
+/.project
+/.settings/
+/.externalToolBuilders/
+*.DS_Store
