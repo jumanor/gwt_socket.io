@@ -2,7 +2,7 @@ gwt-socket.io
 ==============
 A simple GWT wrapper for javascript socket.io
 
-Download [TJSocketIO-0.1.jar](https://drive.google.com/open?id=0B72oLqC-8YVbVDRmNDRJdzR0aTA)
+Download [TJSocketIO-0.2.jar](https://drive.google.com/open?id=0B72oLqC-8YVbUkRCVkNpX0xudms)
 
 Update your .gwt.xml files to include this:
 
@@ -24,31 +24,32 @@ Client (HTML)
     </script>
 
 Client (GWT)    
+    
+    ScriptInjector.fromUrl("/socket.io/socket.io.js").setCallback(new Callback<Void, Exception>() {
 
-    TJSocketIO.getSingleton().loadScript("/socket.io/socket.io.js",new Callback<Void, Exception>() {
-			
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(Void result ) {
 				// TODO Auto-generated method stub
-				TJSocketIO.getSingleton().connect("http://localhost:9090");
-                TJSocketIO.getSingleton().onSocket("news",new SocketHandler<String>() {
+				final TJSocketIO socket=TJSocketIO.connect("http://localhost:9090");
+                socket.onSocket("news",new SocketHandler<String>() {
 
 					@Override
-					public void onSocket(String data) {
+					public void onSocket(String data ) {
 						// TODO Auto-generated method stub
 						GWT.log(data);
-						TJSocketIO.getSingleton().emitSocket("my event",data+" new");
+						socket.emitSocket("my event",data+" new");
 					}
 				});
 			}
-			
+
 			@Override
 			public void onFailure(Exception reason) {
 				// TODO Auto-generated method stub
 				
 			}
-	});
-
+			
+	}).inject();
+ 
 **SECOND EXAMPLE**
 
 Client (HTML)
@@ -66,13 +67,13 @@ Client (HTML)
 
 Client (GWT)    
 
-    TJSocketIO.getSingleton().onSocket("connected", new SocketHandler<Void>() {
+    socket.onSocket("connected", new SocketHandler<Void>() {
 
 		@Override
 		public void onSocket(Void data) {
 		// TODO Auto-generated method stub
 						
-			TJSocketIO.getSingleton().emitSocketResponse("my event", "hello jumanor", new SocketHandler<String>() {
+			socket.emitSocketResponse("my event", "hello jumanor", new SocketHandler<String>() {
 
                 @Override
                 public void onSocket(String data) {
@@ -101,7 +102,7 @@ Client (HTML)
 
 Client (GWT)
 
-    TJSocketIO.getSingleton().onSocket("my event",new SocketAndResponseHandler<String,JavaScriptObject>() {
+    socket.onSocket("my event",new SocketAndResponseHandler<String,JavaScriptObject>() {
 
 		@Override
 		public void onSocketAndResponse(String data,ResponseHandler<JavaScriptObject> respuesta) {

@@ -1,24 +1,15 @@
 package com.epiko.client;
 
-import com.google.gwt.core.client.Callback;
-import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 public class TJSocketIO {
-	
-	private static TJSocketIO instance;
-	private static Object socketIO=null;
+
+	private Object socketIO=null;
 	
 	private TJSocketIO(){
 		
-	} 
-	public static TJSocketIO getSingleton(){
-		if(instance==null){
-			instance= new TJSocketIO();
-		}
-		return instance;
-	}////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	}
 	public interface SocketHandler<T> extends EventHandler{
 		
 		public void onSocket(T data);
@@ -58,14 +49,19 @@ public class TJSocketIO {
 		
 		callback.onSocket(data);
 	}
-	public void connect(){
+	public static TJSocketIO connect(){
+		TJSocketIO tmp=new TJSocketIO();
 		
-		socketIO=connectSocketIONative();
+		tmp.socketIO=tmp.connectSocketIONative();
+		return tmp;
 		
 	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void connect(String path){
+	public static TJSocketIO connect(String path){
 		
-		socketIO=connectSocketIONative(path);
+		TJSocketIO tmp=new TJSocketIO();
+		
+		tmp.socketIO=tmp.connectSocketIONative(path);
+		return tmp;
 		
 	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private native Object connectSocketIONative()/*-{
@@ -82,25 +78,6 @@ public class TJSocketIO {
 		
 		return socket;
 	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void loadScript(String path,final Callback<Void,Exception> callback){
-		
-		ScriptInjector.fromUrl(path).setCallback(new Callback<Void, Exception>() {
-
-			@Override
-			public void onFailure(Exception reason) {
-				// TODO Auto-generated method stub
-				callback.onFailure(reason);
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				// TODO Auto-generated method stub
-				callback.onSuccess(result);
-			}
-			
-		}).inject();
-		
-	}////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public <T> HandlerRegistration onSocket(final String servicio,SocketHandler<T> callback){
 		if(socketIO==null)return null;
 		
