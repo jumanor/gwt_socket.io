@@ -2,7 +2,7 @@ gwt-socket.io
 ==============
 A simple GWT wrapper for javascript socket.io
 
-Download [TJSocketIO-0.2.jar](https://drive.google.com/open?id=0B72oLqC-8YVbUkRCVkNpX0xudms)
+Download [TJSocketIO-0.3.jar](https://drive.google.com/open?id=0B72oLqC-8YVbWTZMUVUzYzlNaW8)
 
 Update your .gwt.xml files to include this:
 
@@ -55,7 +55,7 @@ Client (GWT)
 Client (HTML)
 
     <script>
-            socket.on('connected', function () {
+            socket.on('connect', function () {
                
                 socket.emit('my event','hello jumanor',function(data){
                     
@@ -67,7 +67,7 @@ Client (HTML)
 
 Client (GWT)    
 
-    socket.onSocket("connected", new SocketHandler<Void>() {
+    socket.onSocket("connect", new SocketHandler<Void>() {
 
 		@Override
 		public void onSocket(Void data) {

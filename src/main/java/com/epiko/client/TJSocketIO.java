@@ -66,14 +66,14 @@ public class TJSocketIO {
 	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private native Object connectSocketIONative()/*-{
 	
-		var socket=io.connect({transports: ['websocket']});//solo websocket
+		var socket=$wnd.io.connect({transports: ['websocket']});//solo websocket
 		$wnd.socket = socket; //por compatibilidad hacia atras
 		
 		return socket;
 	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private native Object connectSocketIONative(String path)/*-{
 	
-		var socket=io.connect(path,{transports: ['websocket']});//solo websocket
+		var socket=$wnd.io.connect(path,{transports: ['websocket']});//solo websocket
 		$wnd.socket = socket; //por compatibilidad hacia atras
 		
 		return socket;
