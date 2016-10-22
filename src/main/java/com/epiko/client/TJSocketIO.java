@@ -52,7 +52,7 @@ public class TJSocketIO {
 	public static TJSocketIO connect(){
 		TJSocketIO tmp=new TJSocketIO();
 		
-		tmp.socketIO=tmp.connectSocketIONative();
+		tmp.socketIO=tmp.connectSocketIONative(false);
 		return tmp;
 		
 	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,23 +60,41 @@ public class TJSocketIO {
 		
 		TJSocketIO tmp=new TJSocketIO();
 		
-		tmp.socketIO=tmp.connectSocketIONative(path);
+		tmp.socketIO=tmp.connectSocketIONative(path,false);
 		return tmp;
 		
 	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private native Object connectSocketIONative()/*-{
+	public static TJSocketIO connect(String path,boolean forceNewConnection){
+		
+		TJSocketIO tmp=new TJSocketIO();
+		
+		tmp.socketIO=tmp.connectSocketIONative(path,forceNewConnection);
+		return tmp;
+		
+	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private native Object connectSocketIONative(boolean forceNewConnection)/*-{
 	
-		var socket=$wnd.io.connect({transports: ['websocket']});//solo websocket
+		var socket=$wnd.io.connect({transports: ['websocket'],'force new connection': forceNewConnection});//solo websocket
 		$wnd.socket = socket; //por compatibilidad hacia atras
 		
 		return socket;
 	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private native Object connectSocketIONative(String path)/*-{
+	private native Object connectSocketIONative(String path,boolean forceNewConnection)/*-{
 	
-		var socket=$wnd.io.connect(path,{transports: ['websocket']});//solo websocket
+		var socket=$wnd.io.connect(path,{transports: ['websocket'],'force new connection': forceNewConnection});//solo websocket
 		$wnd.socket = socket; //por compatibilidad hacia atras
 		
 		return socket;
+	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void disconnect(){
+		if(socketIO==null)return;
+		
+		disconnectSocketIONative(socketIO);	
+	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private native void disconnectSocketIONative(Object socket)/*-{
+		
+		socket.disconnect();
+		
 	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public <T> HandlerRegistration onSocket(final String servicio,SocketHandler<T> callback){
 		if(socketIO==null)return null;
@@ -141,9 +159,9 @@ public class TJSocketIO {
 	 */
 	private native <T,TT> Object onSocketNative(Object socket,String servicio,SocketAndResponseHandler<T,TT> callback) /*-{
 		
-		function listener(data){
+		function listener(data,response){
 			
-			$entry(@com.epiko.client.TJSocketIO::onSocketMiddlewareResponse(*)(data,callback,respuesta));
+			$entry(@com.epiko.client.TJSocketIO::onSocketMiddlewareResponse(*)(data,callback,response));
 			
 		}
 		socket.on(servicio,listener);
