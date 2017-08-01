@@ -10,6 +10,9 @@ public class TJSocketIO {
 	private TJSocketIO(){
 		
 	}
+	public Object getSocket(){
+		return socketIO;
+	}////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public interface SocketHandler<T> extends EventHandler{
 		
 		public void onSocket(T data);
@@ -73,16 +76,18 @@ public class TJSocketIO {
 		
 	}///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private native Object connectSocketIONative(boolean forceNewConnection)/*-{
-	
-		var socket=$wnd.io.connect({transports: ['websocket'],'force new connection': forceNewConnection});//solo websocket
-		$wnd.socket = socket; //por compatibilidad hacia atras
+		
+		var io_tmp = $wnd.io || io;
+		
+		var socket=io_tmp.connect({transports: ['websocket'],'force new connection': forceNewConnection});//solo websocket
 		
 		return socket;
 	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private native Object connectSocketIONative(String path,boolean forceNewConnection)/*-{
-	
-		var socket=$wnd.io.connect(path,{transports: ['websocket'],'force new connection': forceNewConnection});//solo websocket
-		$wnd.socket = socket; //por compatibilidad hacia atras
+		
+		var io_tmp = $wnd.io || io;
+		
+		var socket=io_tmp.connect(path,{transports: ['websocket'],'force new connection': forceNewConnection});//solo websocket
 		
 		return socket;
 	}-*/;///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
