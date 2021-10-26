@@ -2,7 +2,7 @@ gwt-socket.io
 ==============
 A simple GWT wrapper for javascript socket.io
 
-Download [TJSocketIO-0.7.jar](https://drive.google.com/open?id=0B72oLqC-8YVbVEVHclBlOVlua2s)
+Download [TJSocketIO-0.7.jar](https://github.com/jumanor/gwt_socket.io/releases/download/v0.7/TJSocketIO-0.7.jar)
 
 Update your .gwt.xml files to include this:
 
